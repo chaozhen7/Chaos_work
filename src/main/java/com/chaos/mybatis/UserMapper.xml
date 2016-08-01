@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chaos.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.chaos.model.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="qq_open_id" property="qqOpenId" jdbcType="VARCHAR" />
+    <result column="image_path" property="imagePath" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="language_id" property="languageId" jdbcType="INTEGER" />
+  </resultMap>
+  <insert id="insert" parameterType="com.chaos.model.User" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user (username, password, nick_name, 
+      qq_open_id, image_path, create_date, 
+      province, city, language_id
+      )
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, 
+      #{qqOpenId,jdbcType=VARCHAR}, #{imagePath,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{languageId,jdbcType=INTEGER}
+      )
+  </insert>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, username, password, nick_name, qq_open_id, image_path, create_date, province, 
+    city, language_id
+    from user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, username, password, nick_name, qq_open_id, image_path, create_date, province, 
+    city, language_id
+    from user
+  </select>
+
+  <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select id, username, password, nick_name, qq_open_id, image_path, create_date, province,
+    city, language_id
+    from user
+    <if test="userName != null and userName !=''">
+      AND username like "%"#{userName,jdbcType=VARCHAR}"%"
+    </if>
+    ORDER BY id
+  </select>
+
+  <delete id="deleteById">
+    DELETE FROM USER WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+</mapper>
